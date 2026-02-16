@@ -72,6 +72,7 @@ EOF
 systemctl enable -q --now openclaw
 msg_ok "Created Service"
 
+APPLICATION="OpenClaw"
 motd_ssh
 customize
 cleanup_lxc

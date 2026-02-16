@@ -20,6 +20,8 @@ update_os
 
 msg_info "Installing Dependencies"
 $STD apt install -y \
+  curl \
+  gnupg \
   ca-certificates \
   build-essential \
   python3 \

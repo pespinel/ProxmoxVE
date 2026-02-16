@@ -39,19 +39,32 @@ mkdir -p /root/.openclaw/workspace
 GATEWAY_PASSWORD=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
 cat <<EOF >/root/.openclaw/openclaw.json
 {
+  "agents": {
+    "defaults": {
+      "workspace": "/root/.openclaw/workspace"
+    }
+  },
+  "commands": {
+    "native": "auto",
+    "nativeSkills": "auto"
+  },
   "gateway": {
-    "mode": "local",
     "port": 18789,
+    "mode": "local",
     "bind": "lan",
-    "auth": {
-      "mode": "password",
-      "password": "${GATEWAY_PASSWORD}"
-    },
     "controlUi": {
       "enabled": true,
       "allowInsecureAuth": true,
       "dangerouslyDisableDeviceAuth": true
+    },
+    "auth": {
+      "mode": "password",
+      "password": "${GATEWAY_PASSWORD}"
     }
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.2.15",
+    "lastTouchedAt": "$(date -u +%Y-%m-%dT%H:%M:%S.000Z)"
   }
 }
 EOF
@@ -77,7 +90,8 @@ StandardError=journal
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q --now openclaw
+systemctl enable -q openclaw
+systemctl start openclaw
 msg_ok "Created Service"
 
 export APPLICATION="OpenClaw"

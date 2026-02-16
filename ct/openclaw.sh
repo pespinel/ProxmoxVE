@@ -47,10 +47,11 @@ build_container
 description
 
 msg_ok "Completed successfully!\n"
-echo -e "${CREATING}${GN}${APP} has been installed!${CL}"
-echo -e "${INFO}${YW} Run the following command inside the container to configure:${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}pct exec ${CTID} -- openclaw onboard${CL}"
-echo -e "${INFO}${YW} Then start the gateway:${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}pct exec ${CTID} -- openclaw gateway${CL}"
+echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
 echo -e "${INFO}${YW} Access Control UI at:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:18789${CL}"
+echo -e "${INFO}${YW} Gateway password (enter in Control UI):${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}See /root/openclaw.creds inside the container${CL}"
+echo -e "${INFO}${YW} Next steps:${CL}"
+echo -e "${TAB}• Open Control UI and enter the gateway password${CL}"
+echo -e "${TAB}• Configure AI provider (OpenRouter, Anthropic, etc.) in Settings${CL}"

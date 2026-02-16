@@ -29,20 +29,20 @@
   ],
   "default_credentials": {
     "username": null,
-    "password": null
+    "password": "stored in /root/openclaw.creds"
   },
   "notes": [
     {
-      "text": "Run `openclaw onboard` inside the container to complete the setup wizard and configure the gateway.",
+      "text": "The gateway password is auto-generated and stored in `/root/openclaw.creds` inside the container.",
+      "type": "info"
+    },
+    {
+      "text": "Access the Control UI at http://<container-ip>:18789 and enter the password to configure AI providers.",
+      "type": "info"
+    },
+    {
+      "text": "Configure your AI provider (OpenRouter, Anthropic, OpenAI, etc.) in the Control UI Settings.",
       "type": "warning"
-    },
-    {
-      "text": "The wizard will guide you through AI provider setup (OpenRouter, Anthropic, OpenAI), gateway auth, and channel configuration.",
-      "type": "info"
-    },
-    {
-      "text": "Once configured, start the gateway with `openclaw gateway` and access the Control UI from your browser.",
-      "type": "info"
     }
   ]
 }

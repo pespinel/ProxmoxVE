@@ -32,11 +32,53 @@ msg_info "Installing OpenClaw (Patience)"
 $STD npm install --global openclaw@latest
 msg_ok "Installed OpenClaw"
 
-msg_info "Creating Workspace"
+msg_info "Configuring OpenClaw"
 mkdir -p /root/.openclaw/workspace
-msg_ok "Created Workspace"
+GATEWAY_PASSWORD=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
+cat <<EOF >/root/.openclaw/openclaw.json
+{
+  "gateway": {
+    "mode": "local",
+    "port": 18789,
+    "bind": "lan",
+    "auth": {
+      "mode": "password",
+      "password": "${GATEWAY_PASSWORD}"
+    },
+    "controlUi": {
+      "enabled": true,
+      "allowInsecureAuth": true,
+      "dangerouslyDisableDeviceAuth": true
+    }
+  }
+}
+EOF
+echo "${GATEWAY_PASSWORD}" >~/openclaw.creds
+msg_ok "Configured OpenClaw"
 
-APPLICATION="OpenClaw"
+msg_info "Creating Service"
+cat <<EOF >/etc/systemd/system/openclaw.service
+[Unit]
+Description=OpenClaw Gateway
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/.openclaw
+ExecStart=openclaw gateway
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target
+EOF
+systemctl enable -q --now openclaw
+msg_ok "Created Service"
+
+export APPLICATION="OpenClaw"
 motd_ssh
 customize
 cleanup_lxc

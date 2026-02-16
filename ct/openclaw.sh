@@ -5,6 +5,9 @@ source <(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxV
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
 # Source: https://github.com/OpenAgentsInc/openclaw
 
+# To test from fork, change the source line above to:
+# source <(curl -fsSL https://raw.githubusercontent.com/pespinel/ProxmoxVE/feature/openclaw/misc/build.func)
+
 APP="OpenClaw"
 var_tags="${var_tags:-ai;automation}"
 var_cpu="${var_cpu:-4}"
@@ -48,10 +51,11 @@ description
 
 msg_ok "Completed successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access Control UI at:${CL}"
+echo -e "${INFO}${YW} Access Web UI at:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:18789${CL}"
-echo -e "${INFO}${YW} Gateway password (enter in Control UI):${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}See /root/openclaw.creds inside the container${CL}"
+echo -e "${INFO}${YW} Complete setup instructions:${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}See /root/openclaw-access.txt inside the container${CL}"
 echo -e "${INFO}${YW} Next steps:${CL}"
-echo -e "${TAB}• Open Control UI and enter the gateway password${CL}"
-echo -e "${TAB}• Configure AI provider (OpenRouter, Anthropic, etc.) in Settings${CL}"
+echo -e "${TAB}• Open the Web UI in your browser${CL}"
+echo -e "${TAB}• Add your AI provider API key (Anthropic, OpenAI, etc.)${CL}"
+echo -e "${TAB}• Start chatting with your AI agent${CL}"

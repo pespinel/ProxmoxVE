@@ -13,6 +13,10 @@ setting_up_container
 network_check
 update_os
 
+: "${SSH_ROOT:=no}"
+: "${PASSWORD:=}"
+: "${SSH_AUTHORIZED_KEY:=}"
+
 msg_info "Installing Dependencies"
 $STD apt install -y \
   ca-certificates \

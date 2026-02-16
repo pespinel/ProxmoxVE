@@ -34,9 +34,15 @@ msg_info "Installing OpenClaw (Patience)"
 $STD npm install --global openclaw@latest
 msg_ok "Installed OpenClaw"
 
-msg_info "Configuring OpenClaw"
+msg_info "Setting up OpenClaw Gateway"
+# Create workspace directory
 mkdir -p /root/.openclaw/workspace
-GATEWAY_PASSWORD=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
+
+# Generate a secure token for gateway access
+GATEWAY_TOKEN=$(openssl rand -hex 32)
+
+# Configuration for LAN access
+# User will configure LLM provider via Web UI
 cat <<EOF >/root/.openclaw/openclaw.json
 {
   "agents": {
@@ -44,22 +50,13 @@ cat <<EOF >/root/.openclaw/openclaw.json
       "workspace": "/root/.openclaw/workspace"
     }
   },
-  "commands": {
-    "native": "auto",
-    "nativeSkills": "auto"
-  },
   "gateway": {
     "port": 18789,
     "mode": "local",
     "bind": "lan",
-    "controlUi": {
-      "enabled": true,
-      "allowInsecureAuth": true,
-      "dangerouslyDisableDeviceAuth": true
-    },
     "auth": {
-      "mode": "password",
-      "password": "${GATEWAY_PASSWORD}"
+      "mode": "token",
+      "token": "${GATEWAY_TOKEN}"
     }
   },
   "meta": {
@@ -68,8 +65,12 @@ cat <<EOF >/root/.openclaw/openclaw.json
   }
 }
 EOF
-echo "${GATEWAY_PASSWORD}" >~/openclaw.creds
-msg_ok "Configured OpenClaw"
+
+# Save token for user reference
+echo "${GATEWAY_TOKEN}" >/root/.openclaw/gateway-token.txt
+chmod 600 /root/.openclaw/gateway-token.txt
+
+msg_ok "Set up OpenClaw Gateway"
 
 msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/openclaw.service
@@ -81,20 +82,89 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/root/.openclaw
-ExecStart=openclaw gateway
+ExecStart=/usr/bin/openclaw gateway
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal
 StandardError=journal
+Environment="NODE_ENV=production"
 
 [Install]
 WantedBy=multi-user.target
 EOF
-systemctl enable -q openclaw
-systemctl start openclaw
+systemctl daemon-reload
+systemctl enable -q --now openclaw
 msg_ok "Created Service"
+
+msg_info "Creating Access Information"
+CONTAINER_IP=$(hostname -I | awk '{print $1}')
+GATEWAY_TOKEN=$(cat /root/.openclaw/gateway-token.txt)
+
+cat <<EOF >/root/openclaw-access.txt
+================================================================================
+  OPENCLAW - ACCESS INFORMATION
+================================================================================
+
+Container IP: ${CONTAINER_IP}
+Gateway Port: 18789
+
+WEB UI ACCESS:
+--------------
+Open in your browser:
+  http://${CONTAINER_IP}:18789
+
+Gateway Token (if required):
+  ${GATEWAY_TOKEN}
+
+INITIAL SETUP:
+--------------
+1. Access the Web UI from your browser
+2. Add your AI provider API key (Anthropic, OpenAI, etc.)
+3. Configure agents and start chatting
+
+ALTERNATIVE - CLI WIZARD:
+--------------------------
+SSH into the container and run:
+  openclaw onboard
+
+SERVICE MANAGEMENT:
+-------------------
+Status:  systemctl status openclaw
+Logs:    journalctl -u openclaw -f
+Restart: systemctl restart openclaw
+
+DOCUMENTATION:
+--------------
+https://docs.openclaw.ai/
+
+================================================================================
+EOF
+msg_ok "Created Access Information"
 
 export APPLICATION="OpenClaw"
 motd_ssh
 customize
-cleanup_lxc
+
+msg_info "Cleaning up"
+$STD apt-get -y autoremove
+$STD apt-get -y autoclean
+msg_ok "Cleaned"
+
+CONTAINER_IP=$(hostname -I | awk '{print $1}')
+
+cat <<EOF
+
+╔══════════════════════════════════════════════════════════════════════╗
+║                                                                      ║
+║  ✓ OpenClaw installed successfully!                                 ║
+║                                                                      ║
+║  🌐 Access Web UI:                                                   ║
+║     http://${CONTAINER_IP}:18789                                        ║
+║                                                                      ║
+║  📋 Complete info: /root/openclaw-access.txt                         ║
+║                                                                      ║
+║  Next step: Open the Web UI and add your AI provider API key        ║
+║                                                                      ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+EOF

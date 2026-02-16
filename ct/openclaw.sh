@@ -47,8 +47,10 @@ build_container
 description
 
 msg_ok "Completed successfully!\n"
-echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
-echo -e "${INFO}${YW} Access it using the following URL:${CL}"
+echo -e "${CREATING}${GN}${APP} has been installed!${CL}"
+echo -e "${INFO}${YW} Run the following command inside the container to configure:${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}pct exec ${CTID} -- openclaw onboard${CL}"
+echo -e "${INFO}${YW} Then start the gateway:${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}pct exec ${CTID} -- openclaw gateway${CL}"
+echo -e "${INFO}${YW} Access Control UI at:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:18789${CL}"
-echo -e "${INFO}${YW} Gateway password is stored in:${CL}"
-echo -e "${TAB}${GATEWAY}${BGN}/root/openclaw.creds${CL}"

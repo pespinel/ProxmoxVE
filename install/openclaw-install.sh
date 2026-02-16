@@ -47,7 +47,8 @@ cat <<EOF >/root/.openclaw/openclaw.json
     },
     "controlUi": {
       "enabled": true,
-      "allowInsecureAuth": true
+      "allowInsecureAuth": true,
+      "dangerouslyDisableDeviceAuth": true
     }
   }
 }

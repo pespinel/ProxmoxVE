@@ -9,7 +9,7 @@
   "updateable": true,
   "privileged": false,
   "interface_port": 18789,
-  "documentation": "https://github.com/OpenAgentsInc/openclaw",
+  "documentation": "https://docs.openclaw.ai/",
   "website": "https://openclaw.ai",
   "logo": "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/openclaw.webp",
   "config_path": "/root/.openclaw/openclaw.json",
@@ -29,15 +29,15 @@
   ],
   "default_credentials": {
     "username": null,
-    "password": null
+    "password": "stored in /root/openclaw.creds"
   },
   "notes": [
     {
-      "text": "After installation, access the web UI to configure your AI provider (OpenRouter, Anthropic, OpenAI, etc.) and set up your API keys.",
+      "text": "The gateway password is auto-generated and stored in `/root/openclaw.creds` inside the container.",
       "type": "info"
     },
     {
-      "text": "Run 'openclaw onboard' in the container to complete the initial setup and configure your first AI provider.",
+      "text": "After installation, access the web UI to configure your AI provider (OpenRouter, Anthropic, OpenAI, etc.) and set up your API keys.",
       "type": "info"
     }
   ]

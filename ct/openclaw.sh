@@ -30,24 +30,13 @@ function update_script() {
 
   NODE_VERSION="22" setup_nodejs
 
-  msg_info "Updating ${APP} Core"
+  msg_info "Updating ${APP}"
   $STD npm install -g openclaw@latest
-  msg_ok "Updated ${APP} Core"
+  msg_ok "Updated ${APP}"
 
-  msg_info "Updating Workspace Skills"
-  if [[ -d /root/.openclaw/workspace ]]; then
-    for dir in /root/.openclaw/workspace/*/; do
-      if [[ -d "${dir}.git" ]]; then
-        msg_info "Updating $(basename "${dir}")"
-        (cd "${dir}" && $STD git pull)
-      fi
-    done
-  fi
-  msg_ok "Updated Workspace Skills"
-
-  msg_info "Restarting Service"
+  msg_info "Restarting ${APP}"
   systemctl restart openclaw
-  msg_ok "Restarted Service"
+  msg_ok "Restarted ${APP}"
 
   msg_ok "Updated successfully!"
   exit
@@ -61,4 +50,5 @@ msg_ok "Completed successfully!\n"
 echo -e "${CREATING}${GN}${APP} setup has been successfully initialized!${CL}"
 echo -e "${INFO}${YW} Access it using the following URL:${CL}"
 echo -e "${TAB}${GATEWAY}${BGN}http://${IP}:18789${CL}"
-echo -e "${INFO}${YW} Configure your AI provider (OpenRouter, Anthropic, etc.) in the web UI${CL}"
+echo -e "${INFO}${YW} Gateway password is stored in:${CL}"
+echo -e "${TAB}${GATEWAY}${BGN}/root/openclaw.creds${CL}"

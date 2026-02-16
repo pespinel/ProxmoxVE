@@ -23,15 +23,32 @@ msg_ok "Installed Dependencies"
 
 NODE_VERSION="22" setup_nodejs
 
-get_lxc_ip
-
 msg_info "Installing OpenClaw (Patience)"
 $STD npm install --global openclaw@latest
 msg_ok "Installed OpenClaw"
 
-msg_info "Creating Workspace Directory"
+msg_info "Configuring OpenClaw"
 mkdir -p /root/.openclaw/workspace
-msg_ok "Created Workspace Directory"
+GATEWAY_PASSWORD=$(openssl rand -base64 18 | tr -dc 'a-zA-Z0-9' | head -c13)
+cat <<EOF >/root/.openclaw/openclaw.json
+{
+  "gateway": {
+    "mode": "local",
+    "port": 18789,
+    "bind": "lan",
+    "auth": {
+      "mode": "password",
+      "password": "${GATEWAY_PASSWORD}"
+    },
+    "controlUi": {
+      "enabled": true,
+      "allowInsecureAuth": true
+    }
+  }
+}
+EOF
+echo "${GATEWAY_PASSWORD}" >~/openclaw.creds
+msg_ok "Configured OpenClaw"
 
 msg_info "Creating Service"
 cat <<EOF >/etc/systemd/system/openclaw.service
@@ -43,7 +60,7 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/root/.openclaw
-ExecStart=/usr/bin/openclaw gateway --port 18789
+ExecStart=openclaw gateway
 Restart=on-failure
 RestartSec=10
 StandardOutput=journal

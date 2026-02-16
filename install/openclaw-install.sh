@@ -16,6 +16,7 @@ update_os
 : "${SSH_ROOT:=no}"
 : "${PASSWORD:=}"
 : "${SSH_AUTHORIZED_KEY:=}"
+: "${app:=openclaw}"
 
 msg_info "Installing Dependencies"
 $STD apt install -y \

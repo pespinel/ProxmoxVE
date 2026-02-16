@@ -1,0 +1,44 @@
+{
+  "name": "OpenClaw",
+  "slug": "openclaw",
+  "categories": [
+    20
+  ],
+  "date_created": "2025-02-16",
+  "type": "ct",
+  "updateable": true,
+  "privileged": false,
+  "interface_port": 18789,
+  "documentation": "https://github.com/OpenAgentsInc/openclaw",
+  "website": "https://openclaw.ai",
+  "logo": "https://cdn.jsdelivr.net/gh/selfhst/icons@main/webp/openclaw.webp",
+  "config_path": "/root/.openclaw/openclaw.json",
+  "description": "OpenClaw is a local AI agent platform that enables you to create, manage, and orchestrate AI agents across multiple channels like WhatsApp, Telegram, Discord, and Slack. Built on Node.js with extensible skills and workspace management, OpenClaw provides a powerful gateway for deploying AI-powered automations with support for multiple AI providers including OpenRouter, Anthropic, and OpenAI.",
+  "install_methods": [
+    {
+      "type": "default",
+      "script": "ct/openclaw.sh",
+      "resources": {
+        "cpu": 4,
+        "ram": 4096,
+        "hdd": 20,
+        "os": "debian",
+        "version": "13"
+      }
+    }
+  ],
+  "default_credentials": {
+    "username": null,
+    "password": null
+  },
+  "notes": [
+    {
+      "text": "After installation, access the web UI to configure your AI provider (OpenRouter, Anthropic, OpenAI, etc.) and set up your API keys.",
+      "type": "info"
+    },
+    {
+      "text": "Run 'openclaw onboard' in the container to complete the initial setup and configure your first AI provider.",
+      "type": "info"
+    }
+  ]
+}
